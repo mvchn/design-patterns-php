@@ -1,4 +1,6 @@
 {
+  "name": "mvchn/design-patterns-php",
+  "description": "Design patterns in PHP",
   "type": "project",
   "license": "MIT",
   "require": {
@@ -19,7 +21,7 @@
   },
   "scripts": {
     "test": [
-      "php vendor/bin/phpunit"
+      "php vendor/bin/phpunit tests"
     ]
   }
 }
