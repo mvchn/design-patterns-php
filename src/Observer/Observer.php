@@ -4,8 +4,8 @@ namespace App\Observer;
 
 class Observer implements ObserverInterface
 {
-    public function update()
+    public function update() : void
     {
-        // TODO: Implement update() method.
+        echo 'Observer updated';
     }
 }
