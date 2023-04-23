@@ -4,8 +4,15 @@ namespace App\Observer;
 
 class Observer implements ObserverInterface
 {
-    public function update() : void
+    private int $id;
+    public function setId(int $id) : self
     {
-        echo 'Observer updated';
+        $this->id = $id;
+        return $this;
+    }
+
+    public function update(string $state) : void
+    {
+        echo sprintf("Observer #%d receive %s. \n", $this->id, $state);
     }
 }

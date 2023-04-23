@@ -9,6 +9,11 @@ class Subject
 
     private string $state;
 
+    public function __construct()
+    {
+        $this->state = 'new';
+    }
+
     public function getState() : string
     {
         return $this->state;
@@ -24,6 +29,8 @@ class Subject
 
     public function registerObserver(ObserverInterface $observer) : self
     {
+        $observer->setId($this->getNextId());
+
         $this->observers[] = $observer;
 
         return $this;
@@ -32,9 +39,14 @@ class Subject
     public function notify() : self
     {
         foreach ($this->observers as $observer) {
-            $observer->update();
+            $observer->update($this->state);
         }
 
         return $this;
+    }
+
+    private function getNextId() : int
+    {
+        return count($this->observers) == 0 ? 0 : max(array_keys($this->observers)) + 1;
     }
 }
