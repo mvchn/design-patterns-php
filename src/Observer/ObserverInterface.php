@@ -4,5 +4,5 @@ namespace App\Observer;
 
 interface ObserverInterface
 {
-    public function update();
+    public function update(string $state) : void;
 }
