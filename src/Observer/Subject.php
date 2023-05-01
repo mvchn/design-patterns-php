@@ -3,7 +3,7 @@
 namespace App\Observer;
 
 
-class Subject
+class Subject implements \SplSubject, SubjectInterface
 {
     const EVENT_ALL = '*';
 
@@ -22,7 +22,7 @@ class Subject
         return $this->state;
     }
 
-    public function setState($state) : self
+    public function setState(string $state) : self
     {
         $this->state = $state;
         $this->notify();
@@ -30,7 +30,7 @@ class Subject
         return $this;
     }
 
-    public function registerObserver(ObserverInterface $observer) : self
+    public function attach(\SplObserver $observer) : self
     {
         $observer->setId($this->getNextId());
 
@@ -39,7 +39,7 @@ class Subject
         return $this;
     }
 
-    public function removeObserver(ObserverInterface $observer) : self
+    public function detach(\SplObserver $observer) : self
     {
         foreach ($this->observers[self::EVENT_ALL] as $key => $obs) {
             if ($obs->getId() == $observer->getId()) {
@@ -58,7 +58,7 @@ class Subject
     public function notify() : self
     {
         foreach ($this->observers[self::EVENT_ALL] as $observer) {
-            $observer->update($this->state);
+            $observer->update($this);
         }
 
         return $this;

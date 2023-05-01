@@ -12,7 +12,7 @@ class ObserverTest extends TestCase
     {
         $subj = new Subject();
         $obj = new Observer();
-        $subj->registerObserver($obj);
+        $subj->attach($obj);
 
         $subj->setState('change');
         $subj->notify();
@@ -25,7 +25,7 @@ class ObserverTest extends TestCase
     {
         $subj = new Subject();
         $obj = new Observer(['change']);
-        $subj->registerObserver($obj);
+        $subj->attach($obj);
 
         $startedDate = new \DateTime();
         $subj->setState('change');
@@ -41,11 +41,11 @@ class ObserverTest extends TestCase
         $obj1 = new Observer();
         $obj2 = new Observer();
         $obj3 = new Observer();
-        $subj->registerObserver($obj1);
-        $subj->registerObserver($obj2);
-        $subj->registerObserver($obj3);
+        $subj->attach($obj1);
+        $subj->attach($obj2);
+        $subj->attach($obj3);
 
-        $subj->removeObserver($obj2);
+        $subj->detach($obj2);
         $this->assertCount(2, $subj->getObservers());
     }
 }

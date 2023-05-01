@@ -2,7 +2,7 @@
 
 namespace App\Observer;
 
-class Observer implements ObserverInterface
+class Observer implements \SplObserver
 {
     private int $id;
 
@@ -43,10 +43,10 @@ class Observer implements ObserverInterface
         return $this->updatedAt;
     }
 
-    public function update(string $state) : void
+    public function update(\SplSubject $subject): void
     {
-        if (in_array($state, $this->states)) {
-            $this->lastState = $state;
+        if ($subject instanceof SubjectInterface && in_array($subject->getState(), $this->states)) {
+            $this->lastState = $subject->getState();
             $this->updatedAt = new \DateTime();
             echo sprintf("Observer #%d receive %s on %s. \n", $this->id, $this->lastState, $this->updatedAt->format('Y-m-d H:i:s'));
         }
