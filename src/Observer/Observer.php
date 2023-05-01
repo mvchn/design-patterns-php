@@ -8,7 +8,9 @@ class Observer implements ObserverInterface
 
     private array $states;
 
-    private string $lastUpdate;
+    private string $lastState;
+
+    private \DateTimeInterface $updatedAt;
 
     public function __construct(array $states = [])
     {
@@ -27,20 +29,26 @@ class Observer implements ObserverInterface
         return $this->id;
     }
 
-    public function getLastUpdate() : ?string
+    public function getLastState() : ?string
     {
-        if (empty($this->lastUpdate)) {
+        if (empty($this->lastState)) {
             return null;
         }
 
-        return $this->lastUpdate;
+        return $this->lastState;
+    }
+
+    public function getUpdatedAt() : ?\DateTimeInterface
+    {
+        return $this->updatedAt;
     }
 
     public function update(string $state) : void
     {
         if (in_array($state, $this->states)) {
-            $this->lastUpdate = $state;
-            echo sprintf("Observer #%d receive %s. \n", $this->id, $this->lastUpdate);
+            $this->lastState = $state;
+            $this->updatedAt = new \DateTime();
+            echo sprintf("Observer #%d receive %s on %s. \n", $this->id, $this->lastState, $this->updatedAt->format('Y-m-d H:i:s'));
         }
     }
 }

@@ -18,7 +18,7 @@ class ObserverTest extends TestCase
         $subj->notify();
 
         $this->assertEquals('change', $subj->getState());
-        $this->assertNull($obj->getLastUpdate());
+        $this->assertNull($obj->getLastState());
     }
 
     public function testObserverChangeState() : void
@@ -27,10 +27,12 @@ class ObserverTest extends TestCase
         $obj = new Observer(['change']);
         $subj->registerObserver($obj);
 
+        $startedDate = new \DateTime();
         $subj->setState('change');
         $subj->notify();
 
-        $this->assertEquals('change', $obj->getLastUpdate());
+        $this->assertEquals('change', $obj->getLastState());
+        $this->assertGreaterThan($startedDate, $obj->getUpdatedAt());
     }
 
     public function testRemoveObserver() : void
