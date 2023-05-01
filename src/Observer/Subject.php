@@ -30,42 +30,35 @@ class Subject implements \SplSubject, SubjectInterface
         return $this;
     }
 
-    public function attach(\SplObserver $observer) : self
+    public function attach(\SplObserver $observer, string $event = self::EVENT_ALL): void
     {
-        $observer->setId($this->getNextId());
+        if (!isset($this->observers[$event])) {
+            $this->observers[$event] = [];
+        }
 
-        $this->observers[self::EVENT_ALL][] = $observer;
-
-        return $this;
+        $this->observers[$event][] = $observer;
     }
 
-    public function detach(\SplObserver $observer) : self
+    public function detach(\SplObserver $observer, string $event = self::EVENT_ALL): void
     {
-        foreach ($this->observers[self::EVENT_ALL] as $key => $obs) {
-            if ($obs->getId() == $observer->getId()) {
-                unset($this->observers[self::EVENT_ALL][$key]);
+        foreach ($this->observers[$event] as $key => $obs) {
+            if ($obs === $observer) {
+                unset($this->observers[$event][$key]);
             }
         }
-
-        return $this;
     }
 
-    public function getObservers() : array
+    public function getObservers(string $event = self::EVENT_ALL) : array
     {
-        return $this->observers[self::EVENT_ALL];
+        return $this->observers[$event];
     }
 
-    public function notify() : self
+    public function notify(string $event = self::EVENT_ALL): void
     {
-        foreach ($this->observers[self::EVENT_ALL] as $observer) {
+        $observers = array_merge($this->observers[$event], $this->observers[self::EVENT_ALL]);
+
+        foreach ($observers as $observer) {
             $observer->update($this);
         }
-
-        return $this;
-    }
-
-    private function getNextId() : int
-    {
-        return count($this->observers[self::EVENT_ALL]) == 0 ? 0 : max(array_keys($this->observers[self::EVENT_ALL])) + 1;
     }
 }

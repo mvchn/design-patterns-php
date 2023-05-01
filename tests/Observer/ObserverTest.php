@@ -8,17 +8,27 @@ use PHPUnit\Framework\TestCase;
 
 class ObserverTest extends TestCase
 {
-    public function testObserverDefaultState() : void
+    public function testObserverNoState() : void
     {
         $subj = new Subject();
         $obj = new Observer();
         $subj->attach($obj);
 
+        $this->assertNull($obj->getLastState());
+    }
+    public function testObserverState() : void
+    {
+        $subj = new Subject();
+        $obj = new Observer();
+        $subj->attach($obj, 'change');
+
+        $startedDate = new \DateTime();
         $subj->setState('change');
-        $subj->notify();
+        $subj->notify('change');
 
         $this->assertEquals('change', $subj->getState());
-        $this->assertNull($obj->getLastState());
+        $this->assertEquals('change', $obj->getLastState());
+        $this->assertGreaterThan($startedDate, $obj->getUpdatedAt());
     }
 
     public function testObserverChangeState() : void
