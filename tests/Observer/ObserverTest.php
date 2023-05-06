@@ -11,30 +11,29 @@ class ObserverTest extends TestCase
     public function testObserverNoState() : void
     {
         $subj = new Subject();
-        $obj = new Observer();
+        $obj = new Observer(1);
         $subj->attach($obj);
 
         $this->assertNull($obj->getLastState());
     }
-    public function testObserverState() : void
+    public function testObserverNotifyState() : void
     {
         $subj = new Subject();
-        $obj = new Observer();
+        $obj = new Observer(1);
         $subj->attach($obj, 'change');
 
         $startedDate = new \DateTime();
         $subj->setState('change');
-        $subj->notify('change');
 
         $this->assertEquals('change', $subj->getState());
         $this->assertEquals('change', $obj->getLastState());
         $this->assertGreaterThan($startedDate, $obj->getUpdatedAt());
     }
 
-    public function testObserverChangeState() : void
+    public function testObserverNotifyAll() : void
     {
         $subj = new Subject();
-        $obj = new Observer(['change']);
+        $obj = new Observer(1);
         $subj->attach($obj);
 
         $startedDate = new \DateTime();
@@ -48,9 +47,9 @@ class ObserverTest extends TestCase
     public function testRemoveObserver() : void
     {
         $subj = new Subject();
-        $obj1 = new Observer();
-        $obj2 = new Observer();
-        $obj3 = new Observer();
+        $obj1 = new Observer(1);
+        $obj2 = new Observer(2);
+        $obj3 = new Observer(3);
         $subj->attach($obj1);
         $subj->attach($obj2);
         $subj->attach($obj3);

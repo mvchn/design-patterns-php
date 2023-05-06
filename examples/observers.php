@@ -6,9 +6,9 @@ use App\Observer\Observer;
 use App\Observer\Subject;
 
 $subject = new Subject();
-$subject->registerObserver(new Observer());
-$subject->registerObserver(new Observer());
-$subject->registerObserver(new Observer());
-$subject->registerObserver(new Observer());
+$subject->attach(new Observer(1), '*');
+$subject->attach(new Observer(2), '*');
+$subject->attach(new Observer(3), '*');
+$subject->attach(new Observer(4), '*');
 
 $subject->notify();

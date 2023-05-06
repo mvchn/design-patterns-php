@@ -6,16 +6,13 @@ class Observer implements \SplObserver
 {
     private int $id;
 
-    private array $states;
-
     private string $lastState;
 
     private \DateTimeInterface $updatedAt;
 
-    public function __construct(array $states = ['*'])
+    public function __construct(int $id)
     {
-        $this->id = 0;
-        $this->states = $states;
+        $this->id = $id;
     }
 
     public function getLastState() : ?string
@@ -34,7 +31,7 @@ class Observer implements \SplObserver
 
     public function update(\SplSubject $subject): void
     {
-        if ($subject instanceof SubjectInterface && ($this->states === ['*'] || in_array($subject->getState(), $this->states))) {
+        if ($subject instanceof SubjectInterface) {
             $this->lastState = $subject->getState();
             $this->updatedAt = new \DateTime();
             echo sprintf("Observer #%d receive %s on %s. \n", $this->id, $this->lastState, $this->updatedAt->format('Y-m-d H:i:s'));

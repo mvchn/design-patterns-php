@@ -6,6 +6,7 @@ namespace App\Observer;
 class Subject implements \SplSubject, SubjectInterface
 {
     const EVENT_ALL = '*';
+    const DEFAULT_STATE = 'new';
 
     private array $observers = [];
 
@@ -13,7 +14,7 @@ class Subject implements \SplSubject, SubjectInterface
 
     public function __construct()
     {
-        $this->state = 'new';
+        $this->state = self::DEFAULT_STATE;
         $this->observers[self::EVENT_ALL] = [];
     }
 
@@ -53,9 +54,9 @@ class Subject implements \SplSubject, SubjectInterface
         return $this->observers[$event];
     }
 
-    public function notify(string $event = self::EVENT_ALL): void
+    public function notify(): void
     {
-        $observers = array_merge($this->observers[$event], $this->observers[self::EVENT_ALL]);
+        $observers = array_merge($this->observers[self::EVENT_ALL], $this->observers[$this->state] ?? []);
 
         foreach ($observers as $observer) {
             $observer->update($this);
