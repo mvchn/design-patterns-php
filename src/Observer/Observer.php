@@ -2,17 +2,39 @@
 
 namespace App\Observer;
 
-class Observer implements ObserverInterface
+class Observer implements \SplObserver
 {
     private int $id;
-    public function setId(int $id) : self
+
+    private string $lastState;
+
+    private \DateTimeInterface $updatedAt;
+
+    public function __construct(int $id)
     {
         $this->id = $id;
-        return $this;
     }
 
-    public function update(string $state) : void
+    public function getLastState() : ?string
     {
-        echo sprintf("Observer #%d receive %s. \n", $this->id, $state);
+        if (empty($this->lastState)) {
+            return null;
+        }
+
+        return $this->lastState;
+    }
+
+    public function getUpdatedAt() : ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function update(\SplSubject $subject): void
+    {
+        if ($subject instanceof SubjectInterface) {
+            $this->lastState = $subject->getState();
+            $this->updatedAt = new \DateTime();
+            echo sprintf("Observer #%d receive %s on %s. \n", $this->id, $this->lastState, $this->updatedAt->format('Y-m-d H:i:s'));
+        }
     }
 }
