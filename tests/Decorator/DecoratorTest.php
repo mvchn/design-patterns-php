@@ -12,9 +12,9 @@ class DecoratorTest extends TestCase
         $first = new NotifierDecorator();
         $next1 = new EmailNotifierDecorator($first);
         $next2 = new SmsNotifierDecorator($next1);
-        $next3 = new TelegramNotifierDecorator($next2);
+        $last = new TelegramNotifierDecorator($next2);
 
-        $next3->send('Notification');
+        $last->send('Notification');
 
         $this->assertTrue(true);
     }

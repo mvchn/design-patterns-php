@@ -2,7 +2,7 @@
 
 namespace App\Decorator;
 
-class SmsNotifierDecorator extends Notifier
+class SmsNotifierDecorator extends NotifierDecorator
 {
     protected $notifier;
 
@@ -11,9 +11,14 @@ class SmsNotifierDecorator extends Notifier
         $this->notifier = $notifier;
     }
 
+    public function cost(): int
+    {
+        return $this->notifier->cost() + 1;
+    }
+
     public function send(string $message): void
     {
         $this->notifier->send($message);
-        echo sprintf("SMS %s\n", $message);
+        echo sprintf("SMS %s costs %d\n", $message, $this->cost());
     }
 }
