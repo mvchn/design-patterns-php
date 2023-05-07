@@ -9,7 +9,7 @@ class Config
 
     private function __construct()
     {
-        $this->config = parse_ini_file(__DIR__ . '/../../.env');
+        $this->config = parse_ini_file(__DIR__ . '/../../.env.example');
     }
 
     public static function getInstance(): Config
