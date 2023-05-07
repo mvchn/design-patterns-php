@@ -2,9 +2,8 @@
 
 namespace App\Tests\Adapter;
 
+use App\Adapter\{TelegramNotification, EmailNotification};
 use App\Adapter\TelegramApi;
-use App\Adapter\TelegramNotification;
-use App\Adapter\EmailNotification;
 use PHPUnit\Framework\TestCase;
 
 class AdapterTest extends TestCase
@@ -18,7 +17,10 @@ class AdapterTest extends TestCase
 
     public function testTelegramNotification(): void
     {
-        $api = $this->createMock(TelegramApi::class);
+        $api = $this->getMockBuilder(TelegramApi::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $target = new TelegramNotification($api, '1234');
         $target->send('Notification', 'Hello!');
         $this->assertTrue(true);
