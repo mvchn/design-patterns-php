@@ -9,8 +9,10 @@ class SimpleFactoryTest extends TestCase
 {
     public function testNotifierException(): void
     {
+        $type = "invalid";
         $this->expectException(FactoryNotifierException::class);
-        SimpleFactory::createNotifier("invalid");
+        $this->expectExceptionMessage("The notifier \"{$type}\" does not exist");
+        SimpleFactory::createNotifier($type);
     }
 
     public function testSmsNotifier(): void
